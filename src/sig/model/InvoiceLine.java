@@ -3,18 +3,21 @@ package sig.model;
 
 
 public class InvoiceLine {
-   private InvoiceHeader invoiceNo;
+   private InvoiceHeader header;
     private String itemName;
     private double itemPrice;
     private int count;
-     private int lineTotal;
+     
 
-    public InvoiceLine(InvoiceHeader invoiceNo, String itemName, double itemPrice, int count) {
-        this.invoiceNo = invoiceNo;
+    public InvoiceLine(String itemName, double itemPrice, int count, InvoiceHeader header) {
+        this.header = header;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.count = count;
     }
+
+   
+   
 
     public int getCount() {
         return count;
@@ -24,12 +27,14 @@ public class InvoiceLine {
         this.count = count;
     }
 
-    public InvoiceHeader getInvoiceNo() {
-        return invoiceNo;
+    public InvoiceHeader getHeader() {
+        return header;
     }
-
-    public void setInvoiceNo(InvoiceHeader invoiceNo) {
-        this.invoiceNo = invoiceNo;
+public void setHeader(InvoiceHeader header) {
+        this.header = header;
+    }
+    public void setInvoiceNum(InvoiceHeader header) {
+        this.header = header;
     }
 
     public String getItemName() {
@@ -48,14 +53,17 @@ public class InvoiceLine {
         this.itemPrice = itemPrice;
         
     }
-
-    public int getItamTotal() {
-        return lineTotal;
+     public double getLineTotal() {
+        return count * itemPrice;
     }
 
-    public void setItamTotal(int lineTotal) {
-        this.lineTotal = (int) (itemPrice*count);
+    @Override
+    public String toString() {
+        return "InvoiceLine{" + "itemName=" + itemName + ", unitPrice=" + itemPrice + ", count=" + count + ", lineTotal=" + getLineTotal() + '}';
     }
+
+
+   
     
     
 }

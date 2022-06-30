@@ -3,10 +3,6 @@ package sig.model;
 
 import com.sun.org.apache.bcel.internal.generic.Type;
 import static java.nio.file.Files.lines;
-import static java.nio.file.Files.lines;
-import static java.nio.file.Files.lines;
-import static java.nio.file.Files.lines;
-import static java.nio.file.Files.lines;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,24 +10,24 @@ import java.util.Date;
 public class InvoiceHeader {
     private int num;
     private String customer;
-    private Date date;
-    private Double invoiceTotal;
+    private String date;
+   
     private ArrayList<InvoiceLine> lines;
 
-    public InvoiceHeader(int num, String customer, Date date) {
+   public InvoiceHeader(int num, String customer, String date) {
         this.num = num;
         this.customer = customer;
         this.date = date;
-        
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+     public void setDate(String date) {
         this.date = date;
     }
+
 
     public int getNum() {
         return num;
@@ -48,24 +44,25 @@ public class InvoiceHeader {
     public void setCustomer(String customer) {
         this.customer = customer;
     }
-
-    public ArrayList<InvoiceLine> getLines() {
+     public double getInvoiceTotal() {
+        double total = 0;
+        for (InvoiceLine line : getLines()) {
+            total += line.getLineTotal();
+        }
+        return total;
+    }
+     
+     @Override
+    public String toString() {
+        return "InvoiceHeader{" + "num=" + num + ", customer=" + customer + ", date=" + date + '}';
+    }
+ public ArrayList<InvoiceLine> getLines() {
+        if (lines == null) {
+            lines = new ArrayList<>();
+        }
         return lines;
     }
+    
 
-    public void setLines(ArrayList<InvoiceLine> lines) {
-        this.lines = lines;
-    }
-
-    public Double getInvoiceTotal() {
-        return invoiceTotal;
-    }
-
-    public void setInvoiceTotal(Double invoiceTotal) {
-        if(num==num){
-           
-        }
-      
-           }
     
 }

@@ -1,172 +1,183 @@
 
 package sig.controller;
 
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
-import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import sig.model.InvoiceHeader;
+import sig.model.InvoiceLine;
+import sig.model.InvoiceLineTableModel;
 import sig.view.InvoiceFrame;
+import sig.view.NewInvoiceForm;
+import sig.view.NewInvoiceLineForm;
 
 
-public class ActionHandler extends JFrame  implements ActionListener{
+public class ActionHandler  implements ActionListener, ListSelectionListener{
  
+    private InvoiceFrame frame;
+    
+
+    public ActionHandler(InvoiceFrame frame) {
+        this.frame = frame;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
-        switch(e.getActionCommand()){
-            case "Create New Invoice":
-                System.out.println("Create New Invoice");
-                newInv();
-                break;
-                case "Delete Invoice":
-                System.out.println("Delete Invoice");
-                deletInv();
-                break;
-                case "New Line":
-                System.out.println("New Line");
-                newLine();
-                break;
-                 case "Delete Line":
-                System.out.println("Delete Line");
-                deleteLine();
-                break;
-                 case "Load File":
-                System.out.println("Load File");
+        String actionCommand = e.getActionCommand();
+        switch (actionCommand) {
+            case "Load File":
                 loadFile();
                 break;
-                 case "Save File":
-                System.out.println("Save File");
+            case "Save File":
                 saveFile();
                 break;
+            case "Create New Invoice":
+                createNewInvoice();
+                break;
+            case "Delete Invoice":
+                deleteInvoice();
                 
-        
+                break;
+            case "New Line":
+                newLine();
+                break;
+            case "Delete Line":
+                deleteLine();
+                break;
         }
     }
 
-    private void newInv() {
-    }
-
-    private void deletInv() {
-
-         
-}
-    private void newLine() {
-        
- JTextField itemName;
-        JTextField itemCount;
-        JTextField itemPrice;
-        JButton  btn;
-        JButton btn2;
-        
-        
-//super("Ui Componnent"); 
-setLayout(new FlowLayout());
-    itemName=new  JTextField(15);
-    JLabel userl=new JLabel("Item Name");
-    add(userl);
-    add(itemName);
-     // setSize(300,200);
-     //setLocation(200,300);  
-      itemCount=new  JTextField(15);
-    JLabel user2=new JLabel("Item Count");
-    add(user2);
-    add(itemCount);
-     // setSize(300,200);
-    // setLocation(200,400);  
-;
-          itemPrice=new  JTextField(15);
-    JLabel user3=new JLabel("Item Price");
-    add(user3);
-    add(itemPrice);
-    //  setSize(300,200);
-    // setLocation(200,500);  
-     setVisible(true);
-
-     btn=new JButton("OK");
-     add(btn);
-     btn.setActionCommand("a");
-     
-   //  MyLisner l=new MyLisner();
-    btn.addActionListener((ActionListener) this);
-      btn2=new JButton("Cancle");
-     add(btn2);
-          btn2.setActionCommand("b");
-
-      btn2.addActionListener((ActionListener) this);
-     setSize(300,200);
-     setLocation(200,800);
-      setVisible(true);
-  
-    
-    }
-
-    private void deleteLine() {
-        
-      
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        System.out.println("Row Selected");
+        int selectedRow = frame.getInvHeaderTable().getSelectedRow();
+        System.out.println(selectedRow);
+        ArrayList<InvoiceLine> lines = frame.getInvoiceHeadersList().get(selectedRow).getLines();
+        frame.getInvLineTable().setModel(new InvoiceLineTableModel(lines));
     }
 
     private void loadFile() {
-       JFileChooser fc= new JFileChooser();
-       int result= fc.showOpenDialog(fc);
-       //دا جديد
-        BufferedReader reader=null;
-        String line="";
-         String file=""
-                 + ""
-                 + "+-6"
-                 + "662. ]0,0 b ";
-        if(result==JFileChooser.APPROVE_OPTION){
-       String path= fc.getSelectedFile().getPath();
-       FileInputStream fis=null;
-       try
-       {
-      fis =new FileInputStream(path);
-          
-      //جديد
-      reader=new BufferedReader(new FileReader(file));
-       int size=fis.available();
-       byte []  b=new byte[size];
-       fis.read(b);
-     //      JTableHeader tableHeader = null;
-//       headerTable.setTableHeader(tableHeader);
-      
-       //هنا كود ta.settext(b);
-      
-       }
-       catch (FileNotFoundException e){
-               
-              e.printStackTrace();
-               }
-       catch(IOException e){
-           e.printStackTrace();
-       } finally{
-              try{ fis.close();}catch(IOException e){
-              }
-       }
+        try {
+            JFileChooser fc = new JFileChooser();
+            int result = fc.showOpenDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File headerFile = fc.getSelectedFile();
+                String headerStrPath = headerFile.getAbsolutePath();
+                Path headerPath = Paths.get(headerStrPath);
+                List<String> headerLines = Files.lines(headerPath).collect(Collectors.toList());
+                // ["1,22-11-2020,Ali", "2,13-10-2021,Saleh"]
+                ArrayList<InvoiceHeader> invoiceHeadersList = new ArrayList<>();
+                for (String headerLine : headerLines) {
+                    String[] parts = headerLine.split(",");
+                    // parts = ["1", "22-11-2020", "Ali"]
+                    // parts = ["2", "13-10-2021", "Saleh"]
+                    int id = Integer.parseInt(parts[0]);
+                    InvoiceHeader invHeader = new InvoiceHeader(id, parts[2], parts[1]);
+                    invoiceHeadersList.add(invHeader);
+                }
+                System.out.println("check");
+                result = fc.showOpenDialog(frame);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    String lineStrPath = fc.getSelectedFile().getAbsolutePath();
+                    Path linePath = Paths.get(lineStrPath);
+                    List<String> lineLines = Files.lines(linePath).collect(Collectors.toList());
+                    // ["1,Mobile,3200,1", "1,Cover,20,2", "1,Headphone,130,1", "2,Laptop,4000,1", "2,Mouse,35,1"]
+                    for (String lineLine : lineLines) {
+                        String[] parts = lineLine.split(",");
+                        // ["1","Mobile","3200","1"]
+                        // ["1","Cover","20","2"]
+                        // ["1","Headphone","130","1"]
+                        // ["2","Laptop","4000","1"]
+                        // ["2","Mouse","35","1"]
+                        int invNum = Integer.parseInt(parts[0]);
+                        double price = Double.parseDouble(parts[2]);
+                        int count = Integer.parseInt(parts[3]);
+                        InvoiceHeader header = getInvoiceHeaderById(invoiceHeadersList, invNum);
+                        
+                       InvoiceLine invLine = new InvoiceLine(parts[1], price, count, header);
+                       // InvoiceLine invLine = new InvoiceLine(parts[1], price, count, header);
+                        header.getLines().add(invLine);
+                    }
+                    frame.setInvoiceHeadersList(invoiceHeadersList);
+                    
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
-    private void saveFile() {
+    private InvoiceHeader getInvoiceHeaderById(ArrayList<InvoiceHeader> invoices, int num) {
+        for (InvoiceHeader invoice : invoices) {
+            if (invoice.getNum() == num) {
+                return invoice;
+            }
+        }
+        
+        return null;
     }
     
+    private void createNewInvoice() {
+        NewInvoiceForm a=null;
+        if(a==null)
+     {
+         a=new NewInvoiceForm();  
+     }
+    a.setVisible(true);
+    }
+
+    private void deleteInvoice() {
+        //delete selected invoice
+        
+       
+       int selectedRow = this.frame.getInvHeaderTable().getSelectedRow();
+ if(selectedRow>=0)
+ {
+    this.frame.getInvHeaderTable().remove(selectedRow);
+     JOptionPane.showMessageDialog(null, "Row Deleted");
+ }else {     JOptionPane.showMessageDialog(null, "Unable To Delete");
+
+ }
+      
+    }
+
+    private void saveFile() {
+        JFileChooser fc = new JFileChooser();
+        
+    }
+
+    private void newLine() {
+        NewInvoiceLineForm a=null;
+         if(a==null)
+     {
+         a=new NewInvoiceLineForm();  
+     }
+    a.setVisible(true);
+      
+      
+    }
+
+    private void deleteLine() {
+        int selectedRow = this.frame.getInvLineTable() .getSelectedRow();
+ if(selectedRow>=0)
+ {
+    this.frame.getInvLineTable().remove(selectedRow);
+     JOptionPane.showMessageDialog(null, "Row Deleted");
+ }else {     JOptionPane.showMessageDialog(null, "Unable To Delete");
+
+ }
+    }
+      
 }
