@@ -1,5 +1,14 @@
 package sig.view;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import sig.model.InvoiceHeader;
+import sig.model.InvoiceHeaderTableModel;
+import sig.model.InvoiceLine;
+import sig.model.InvoiceLineTableModel;
+import static sig.view.NewInvoiceForm.customerTxt;
+import static sig.view.NewInvoiceForm.invDateTxt;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,12 +20,17 @@ package sig.view;
  * @author ENG AMR
  */
 public class NewInvoiceLineForm extends javax.swing.JFrame {
-
+  private InvoiceFrame frame;
     /**
      * Creates new form NewInvoiceLineForm
      */
-    public NewInvoiceLineForm() {
+    public NewInvoiceLineForm(InvoiceFrame frame) {
         initComponents();
+        this.frame= frame;
+    }
+
+    private NewInvoiceLineForm() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -31,13 +45,13 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
         itemNameLabel = new javax.swing.JLabel();
         itemCountLabel = new javax.swing.JLabel();
         itemPriceLabel = new javax.swing.JLabel();
-        okButton = new javax.swing.JButton();
+        ok = new javax.swing.JButton();
         cancelBatton = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        itemNameTxt = new javax.swing.JTextField();
+        itemCountTxt = new javax.swing.JTextField();
+        itemPriceTxt = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         itemNameLabel.setText("Item Name");
 
@@ -45,7 +59,12 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
 
         itemPriceLabel.setText("Item Price");
 
-        okButton.setText("OK");
+        ok.setText("OK");
+        ok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okActionPerformed(evt);
+            }
+        });
 
         cancelBatton.setText("Cancel");
         cancelBatton.addActionListener(new java.awt.event.ActionListener() {
@@ -54,9 +73,15 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        itemNameTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                itemNameTxtActionPerformed(evt);
+            }
+        });
+
+        itemPriceTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPriceTxtActionPerformed(evt);
             }
         });
 
@@ -70,17 +95,17 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(itemNameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(itemNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(itemCountLabel)
                             .addComponent(itemPriceLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                            .addComponent(jTextField3)))))
+                            .addComponent(itemCountTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(itemPriceTxt)))))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ok, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cancelBatton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -90,18 +115,18 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemNameLabel)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(itemNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(itemCountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(itemCountLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemPriceLabel)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(itemPriceTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
+                    .addComponent(ok)
                     .addComponent(cancelBatton)))
         );
 
@@ -112,9 +137,38 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cancelBattonActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void itemNameTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_itemNameTxtActionPerformed
+
+    private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
+        // TODO add your handling code here:
+        //InvoiceFrame frame=new  InvoiceFrame ();
+     
+         if(itemNameTxt.getText().isEmpty()|| itemPriceTxt.getText().isEmpty()|| itemCountTxt.getText().isEmpty())
+         {
+             JOptionPane.showMessageDialog(this, "Pleas enter all fields","try again",
+                     JOptionPane.ERROR_MESSAGE);
+         }else{
+             String itemName = itemNameTxt.getText();
+        double itemPrice = Double.parseDouble(itemPriceTxt.getText().toString());
+         int count =Integer.parseInt(itemCountTxt.getText().toString());
+              ArrayList<InvoiceLine> a = this.frame.getInvoiceLinesList();
+        // InvoiceLine xx= new InvoiceLine(this.frame.getInvoiceLinesList(),itemName, itemPrice,count);
+     InvoiceLine xx =new InvoiceLine(itemName, itemPrice,count);
+        a.add(xx);
+        this.frame.getInvLineTable().setModel(new InvoiceLineTableModel( a));
+        JOptionPane.showMessageDialog(null, "Row Added");
+        this.dispose();
+        
+ }
+         
+        
+    }//GEN-LAST:event_okActionPerformed
+
+    private void itemPriceTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPriceTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemPriceTxtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,11 +208,11 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBatton;
     private javax.swing.JLabel itemCountLabel;
+    private javax.swing.JTextField itemCountTxt;
     private javax.swing.JLabel itemNameLabel;
+    private javax.swing.JTextField itemNameTxt;
     private javax.swing.JLabel itemPriceLabel;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JButton okButton;
+    private javax.swing.JTextField itemPriceTxt;
+    private javax.swing.JButton ok;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,6 +16,18 @@ public class InvoiceLine {
         this.count = count;
     }
 
+    public InvoiceLine(String itemName, double itemPrice, int count) {
+      this.itemName = itemName;
+        this.itemPrice = itemPrice;
+        this.count = count;
+    }
+
+   
+
+   
+
+  
+
    
    
 

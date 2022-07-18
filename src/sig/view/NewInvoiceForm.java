@@ -5,8 +5,12 @@
  */
 package sig.view;
 
+import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sig.model.InvoiceHeader;
+import sig.model.InvoiceHeaderTableModel;
 
 /**
  *
@@ -14,11 +18,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class NewInvoiceForm extends javax.swing.JFrame {
 
+    
+     private InvoiceFrame frame;
     /**
      * Creates new form NewInvoiceForm
-     */
-    public NewInvoiceForm() {
+     *///private static  InvoiceHeaderTableModel invoiceHeaderTableModel;
+    public NewInvoiceForm(InvoiceFrame frame) {
         initComponents();
+        this.frame= frame;
     }
 
     /**
@@ -37,7 +44,8 @@ public class NewInvoiceForm extends javax.swing.JFrame {
         invDateTxt = new javax.swing.JTextField();
         customerTxt = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("jFrame");
 
         invoiceDateLabel.setText("Invoice Date");
 
@@ -51,6 +59,11 @@ public class NewInvoiceForm extends javax.swing.JFrame {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,23 +102,41 @@ public class NewInvoiceForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-  private InvoiceFrame frame;
+ 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
-         
+          InvoiceFrame frame=new  InvoiceFrame ();
+        
         String date = invDateTxt.getText();
          String customer = customerTxt.getText();
+         
          if(date.isEmpty()|| customer.isEmpty())
          {
              JOptionPane.showMessageDialog(this, "Pleas enter all fields","try again",
                      JOptionPane.ERROR_MESSAGE);
          }else{
-             DefaultTableModel model = ( DefaultTableModel) frame.getInvHeaderTable().getModel();
+            // DefaultTableModel model = ( DefaultTableModel) frame.getInvHeaderTable().getModel();
             // model.addRow(new Object[]{customer,date);
-         model.addRow(new Object []{customer,date});
+      //   model.addRow(new Object []{customer,date});
+         //model.insertRow(model.getRowCount(), new Object []{customer,date});
+         
+         
+         ArrayList<InvoiceHeader> a =(this.frame.getInvoiceHeadersList());
+         InvoiceHeader xx= new InvoiceHeader(this.frame.getInvoiceHeadersList().size()+1, customer, date);
+      a.add(xx);
+        this.frame.getInvHeaderTable().setModel(new InvoiceHeaderTableModel( a));
+        JOptionPane.showMessageDialog(null, "Row Added");
+        this.dispose();
+        
          }
         
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+ NewInvoiceForm a=null;
+ a.setVisible(false);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,7 +168,7 @@ public class NewInvoiceForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewInvoiceForm().setVisible(true);
+                //new NewInvoiceForm().setVisible(true);
             }
         });
     }
@@ -145,8 +176,8 @@ public class NewInvoiceForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel customerLabel;
-    private javax.swing.JTextField customerTxt;
-    private javax.swing.JTextField invDateTxt;
+    public static javax.swing.JTextField customerTxt;
+    public static javax.swing.JTextField invDateTxt;
     private javax.swing.JLabel invoiceDateLabel;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables

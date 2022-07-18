@@ -5,18 +5,24 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import sig.model.InvoiceHeader;
+import sig.model.InvoiceHeaderTableModel;
 import sig.model.InvoiceLine;
 import sig.model.InvoiceLineTableModel;
 import sig.view.InvoiceFrame;
@@ -32,7 +38,7 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
     public ActionHandler(InvoiceFrame frame) {
         this.frame = frame;
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
@@ -61,13 +67,27 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        System.out.println("Row Selected");
+        System.out.println("valueChanged : Row Selected");
         int selectedRow = frame.getInvHeaderTable().getSelectedRow();
         System.out.println(selectedRow);
-        ArrayList<InvoiceLine> lines = frame.getInvoiceHeadersList().get(selectedRow).getLines();
+        
+      
+        if(selectedRow < 0 ){
+        }else {
+            setDataToTextView(frame.getInvoiceHeadersList().get(selectedRow));
+            
+                 ArrayList<InvoiceLine> lines = frame.getInvoiceHeadersList().get(selectedRow < 0 ? 0 :selectedRow ).getLines();
         frame.getInvLineTable().setModel(new InvoiceLineTableModel(lines));
+        frame.setInvoiceLinesList(lines);
+        }
+   
     }
-
+void setDataToTextView(InvoiceHeader invoiceHeader){
+frame.numLabel.setText(invoiceHeader.getNum()+"");
+frame.dateLabel.setText(invoiceHeader.getDate()+"");
+frame.customerLabel.setText(invoiceHeader.getCustomer()+"");
+frame.invTotalTxt.setText(invoiceHeader.getInvoiceTotal()+"");
+}
     private void loadFile() {
         try {
             JFileChooser fc = new JFileChooser();
@@ -133,7 +153,7 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
         NewInvoiceForm a=null;
         if(a==null)
      {
-         a=new NewInvoiceForm();  
+         a=new NewInvoiceForm(this.frame);  
      }
     a.setVisible(true);
     }
@@ -145,8 +165,19 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
        int selectedRow = this.frame.getInvHeaderTable().getSelectedRow();
  if(selectedRow>=0)
  {
-    this.frame.getInvHeaderTable().remove(selectedRow);
+      ArrayList<InvoiceHeader> a =(this.frame.getInvoiceHeadersList());
+      InvoiceHeader x=a.remove(selectedRow);
+        this.frame.getInvHeaderTable().setModel(new InvoiceHeaderTableModel( a));
+       this.frame.customerLabel.setText("");
+       this.frame.dateLabel.setText("");
+       this.frame.invTotalTxt.setText("");
+       this.frame.numLabel.setText("");
+//     DefaultTableModel jtModel= (DefaultTableModel) this.frame.getInvHeaderTable().getModel();
+//    jtModel.removeRow(selectedRow);
+//     this.frame.getInvHeaderTable().remove(selectedRow);
+//    this.frame.getInvHeaderTable().notifyAll();
      JOptionPane.showMessageDialog(null, "Row Deleted");
+     
  }else {     JOptionPane.showMessageDialog(null, "Unable To Delete");
 
  }
@@ -155,6 +186,17 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
 
     private void saveFile() {
         JFileChooser fc = new JFileChooser();
+      fc.showSaveDialog(frame);
+      File f=fc.getSelectedFile();
+        try {
+            FileWriter fw =new FileWriter(f);
+            JTable str = frame.getInvHeaderTable();
+            fw.write(10);
+            
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        
         
     }
 
@@ -162,7 +204,7 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
         NewInvoiceLineForm a=null;
          if(a==null)
      {
-         a=new NewInvoiceLineForm();  
+         a=new NewInvoiceLineForm(this.frame);  
      }
     a.setVisible(true);
       
@@ -173,11 +215,22 @@ public class ActionHandler  implements ActionListener, ListSelectionListener{
         int selectedRow = this.frame.getInvLineTable() .getSelectedRow();
  if(selectedRow>=0)
  {
-    this.frame.getInvLineTable().remove(selectedRow);
+     ArrayList<InvoiceLine> a =(this.frame.getInvoiceLinesList());
+     a.remove(selectedRow);
+    //this.frame.getInvLineTable().remove(selectedRow);
+            this.frame.getInvLineTable().setModel(new InvoiceLineTableModel(a));
+
      JOptionPane.showMessageDialog(null, "Row Deleted");
  }else {     JOptionPane.showMessageDialog(null, "Unable To Delete");
-
  }
-    }
+ }
+//int selectedRow = this.frame.getInvLineTable() .getSelectedRow();
+//InvoiceLine line=this.frame.getInvoiceLinesList().get(selectedRow);
+//this.frame.getInvoiceLinesList().remove(selectedRow);
+////this.frame.fireTbeleDataChanged();
+ }
+ 
+ 
+    
       
-}
+

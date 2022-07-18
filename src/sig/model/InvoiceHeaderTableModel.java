@@ -14,7 +14,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class InvoiceHeaderTableModel extends AbstractTableModel  {
         private ArrayList<InvoiceHeader> data;
-    private String[] cols = {"num", "Customer ", " Date" ,"Invoice Total"};
+   private String[] cols = {"num", "Customer ", " Date" ,"Invoice Total"};
 
     public InvoiceHeaderTableModel(ArrayList<InvoiceHeader> data) {
         this.data = data;
@@ -50,6 +50,7 @@ public class InvoiceHeaderTableModel extends AbstractTableModel  {
     public String getColumnName(int column) {
         return cols[column];
     }
+    
     
     
     

@@ -8,6 +8,7 @@ package sig.view;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -22,9 +23,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import sig.controller.ActionHandler;
 import sig.model.InvoiceHeader;
 import sig.model.InvoiceHeaderTableModel;
+import sig.model.InvoiceLine;
+import sig.model.InvoiceLineTableModel;
 
 /**
  *
@@ -69,6 +73,7 @@ public class InvoiceFrame extends javax.swing.JFrame {
         numLabel = new javax.swing.JLabel();
         dateLabel = new javax.swing.JLabel();
         customerLabel = new javax.swing.JLabel();
+        invTotalTxt = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         loadMenu = new javax.swing.JMenuItem();
@@ -93,6 +98,11 @@ public class InvoiceFrame extends javax.swing.JFrame {
                 headerTableAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        headerTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                headerTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(headerTable);
@@ -149,11 +159,11 @@ public class InvoiceFrame extends javax.swing.JFrame {
             }
         });
 
-        numLabel.setText("jLabel7");
+        numLabel.setText(null);
 
-        dateLabel.setText("jLabel8");
+        dateLabel.setText(null);
 
-        customerLabel.setText("jLabel9");
+        //invTotalTxt.setText(getInvoiceHeadersList.cols[3]);
 
         jMenu1.setText("File");
 
@@ -202,7 +212,8 @@ public class InvoiceFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(numLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(dateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(customerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(customerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(invTotalTxt))))
                         .addGap(50, 50, 50))))
         );
         layout.setVerticalGroup(
@@ -223,7 +234,9 @@ public class InvoiceFrame extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(customerLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(invTotalTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
@@ -256,10 +269,18 @@ public class InvoiceFrame extends javax.swing.JFrame {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
-         DefaultTableModel model1= (DefaultTableModel)lineTable.getModel();
-                model1.setNumRows(2);
+//         DefaultTableModel model1= (DefaultTableModel)lineTable.getModel();
+//                model1.setNumRows(2);
     }//GEN-LAST:event_deleteButtonActionPerformed
-
+private void headerTableMouseClicked(java.awt.event.ActionEvent evt){
+     int i=headerTable.getSelectedRow();
+    TableModel model=headerTable.getModel();
+         numLabel.setText(model.getValueAt(i, 0).toString());
+          dateLabel.setText(model.getValueAt(i,1).toString());
+           customerLabel.setText(model.getValueAt(i,2).toString());
+            invTotalTxt.setText(model.getValueAt(i, 3).toString());
+                     
+}
     private void deleteInvoiceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteInvoiceButtonActionPerformed
             
         /* int selectedRow = getInvHeaderTable().getSelectedRow();
@@ -275,9 +296,17 @@ public class InvoiceFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_deleteInvoiceButtonActionPerformed
 
+    private void headerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerTableMouseClicked
+        // TODO add your handling code here:
+        
+        int i=headerTable.getSelectedRow();
+        T
+    }//GEN-LAST:event_headerTableMouseClicked
+
     /**
      * @param args the command line arguments
      */}
+      
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -314,11 +343,12 @@ public class InvoiceFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton NewButton;
-    private javax.swing.JLabel customerLabel;
-    private javax.swing.JLabel dateLabel;
+    public javax.swing.JLabel customerLabel;
+    public javax.swing.JLabel dateLabel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteInvoiceButton;
     public javax.swing.JTable headerTable;
+    public javax.swing.JTextField invTotalTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -330,13 +360,15 @@ public class InvoiceFrame extends javax.swing.JFrame {
     private javax.swing.JTable lineTable;
     private javax.swing.JMenuItem loadMenu;
     private javax.swing.JButton newInvoiceButton;
-    private javax.swing.JLabel numLabel;
+    public javax.swing.JLabel numLabel;
     private javax.swing.JMenuItem saveMenu;
     // End of variables declaration//GEN-END:variables
     private ActionHandler controller;
+ 
     private ArrayList<InvoiceHeader> invoiceHeadersList;
-   // private InvoiceHeaderTableModel headerTableModel;
+    private ArrayList<InvoiceLine> invoiceLinesList;
 private InvoiceHeaderTableModel headerTableModel;
+  private InvoiceLineTableModel lineTableModel ;
     public ActionHandler getController() {
         return controller;
     }
@@ -350,7 +382,14 @@ private InvoiceHeaderTableModel headerTableModel;
         headerTableModel = new InvoiceHeaderTableModel(invoiceHeadersList);
         this.headerTable.setModel(headerTableModel);
     }
-
+   public ArrayList<InvoiceLine> getInvoiceLinesList() {
+        return invoiceLinesList;
+    }
+public void setInvoiceLinesList(ArrayList<InvoiceLine> invoiceLinesList) {
+        this.invoiceLinesList = invoiceLinesList;
+        lineTableModel = new InvoiceLineTableModel(invoiceLinesList);
+        this.lineTable.setModel(lineTableModel);
+    }
     public JTable getInvHeaderTable() {
         return headerTable;
     }
