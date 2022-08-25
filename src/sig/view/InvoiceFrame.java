@@ -365,17 +365,22 @@ private void headerTableMouseClicked(java.awt.event.ActionEvent evt){
     // End of variables declaration//GEN-END:variables
     private ActionHandler controller;
  
-    private ArrayList<InvoiceHeader> invoiceHeadersList;
-    private ArrayList<InvoiceLine> invoiceLinesList;
-private InvoiceHeaderTableModel headerTableModel;
-  private InvoiceLineTableModel lineTableModel ;
+    public ArrayList<InvoiceHeader> invoiceHeadersList;
+   public ArrayList<InvoiceLine> invoiceLinesList;
+public InvoiceHeaderTableModel headerTableModel;
+  public InvoiceLineTableModel lineTableModel ;
     public ActionHandler getController() {
         return controller;
     }
 
     public ArrayList<InvoiceHeader> getInvoiceHeadersList() {
+         if (invoiceHeadersList == null) invoiceHeadersList = new ArrayList<>();
         return invoiceHeadersList;
     }
+//     public ArrayList<InvoiceHeader> getInvoices() {
+//        if (invoiceHeadersList == null) invoiceHeadersList = new ArrayList<>();
+//        return invoiceHeadersList;
+//    }
 
     public void setInvoiceHeadersList(ArrayList<InvoiceHeader> invoiceHeadersList) {
         this.invoiceHeadersList = invoiceHeadersList;
@@ -383,6 +388,8 @@ private InvoiceHeaderTableModel headerTableModel;
         this.headerTable.setModel(headerTableModel);
     }
    public ArrayList<InvoiceLine> getInvoiceLinesList() {
+                if (invoiceLinesList == null) invoiceLinesList = new ArrayList<>();
+
         return invoiceLinesList;
     }
 public void setInvoiceLinesList(ArrayList<InvoiceLine> invoiceLinesList) {

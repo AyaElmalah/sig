@@ -21,12 +21,14 @@ import static sig.view.NewInvoiceForm.invDateTxt;
  */
 public class NewInvoiceLineForm extends javax.swing.JFrame {
   private InvoiceFrame frame;
+  private InvoiceHeader header;
     /**
      * Creates new form NewInvoiceLineForm
      */
-    public NewInvoiceLineForm(InvoiceFrame frame) {
+    public NewInvoiceLineForm(InvoiceFrame frame,InvoiceHeader header) {
         initComponents();
         this.frame= frame;
+        this.header= header;
     }
 
     private NewInvoiceLineForm() {
@@ -135,6 +137,9 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
 
     private void cancelBattonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBattonActionPerformed
         // TODO add your handling code here:
+        cancelBatton.setVisible(false);
+        this.dispose();
+        cancelBatton = null;
     }//GEN-LAST:event_cancelBattonActionPerformed
 
     private void itemNameTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameTxtActionPerformed
@@ -155,7 +160,7 @@ public class NewInvoiceLineForm extends javax.swing.JFrame {
          int count =Integer.parseInt(itemCountTxt.getText().toString());
               ArrayList<InvoiceLine> a = this.frame.getInvoiceLinesList();
         // InvoiceLine xx= new InvoiceLine(this.frame.getInvoiceLinesList(),itemName, itemPrice,count);
-     InvoiceLine xx =new InvoiceLine(itemName, itemPrice,count);
+     InvoiceLine xx =new InvoiceLine(itemName, itemPrice,count,header);
         a.add(xx);
         this.frame.getInvLineTable().setModel(new InvoiceLineTableModel( a));
         JOptionPane.showMessageDialog(null, "Row Added");

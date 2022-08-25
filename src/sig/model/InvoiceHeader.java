@@ -51,18 +51,27 @@ public class InvoiceHeader {
         }
         return total;
     }
-     
-     @Override
-    public String toString() {
-        return "InvoiceHeader{" + "num=" + num + ", customer=" + customer + ", date=" + date + '}';
-    }
- public ArrayList<InvoiceLine> getLines() {
+      public ArrayList<InvoiceLine> getLines() {
         if (lines == null) {
             lines = new ArrayList<>();
         }
         return lines;
     }
-    
+     
+     @Override
+    public String toString() {
+        return "InvoiceHeader{" + "num=" + num + ", customer=" + customer + ", date=" + date + '}';
+    }
+
+//  public String getAsCSV() {
+//        return num+ "," + date + "," + customer;
+//    }
+
+ 
+
+    public String getAsCSVfile() {
+        return num+ "," + date + "," + customer;
+    }
 
     
 }

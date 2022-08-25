@@ -5,7 +5,12 @@
  */
 package sig.view;
 
+import java.awt.event.FocusEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,14 +23,14 @@ import sig.model.InvoiceHeaderTableModel;
  */
 public class NewInvoiceForm extends javax.swing.JFrame {
 
-    
-     private InvoiceFrame frame;
+    private InvoiceFrame frame;
+Date dateTemp;
     /**
      * Creates new form NewInvoiceForm
      *///private static  InvoiceHeaderTableModel invoiceHeaderTableModel;
     public NewInvoiceForm(InvoiceFrame frame) {
         initComponents();
-        this.frame= frame;
+        this.frame = frame;
     }
 
     /**
@@ -102,40 +107,55 @@ public class NewInvoiceForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
-          InvoiceFrame frame=new  InvoiceFrame ();
+        InvoiceFrame frame = new InvoiceFrame();
+//         private void check (String vDateStr) {
+//                
+        String vDateStr = invDateTxt.getText();
+//        DateFormat formatter;
+//        formatter = new SimpleDateFormat("dd-mm-YYYY");
+////        Date dateTemp =  dateTemp = (Date) formatter.parse(vDateStr);
+//        try {
+//                Date dateTemp = (Date) formatter.parse(vDateStr);
+//            } catch (ParseException ex) {
+//                JOptionPane.showMessageDialog(null, "WRONG DATE FORMATE ");
+//            }
         
-        String date = invDateTxt.getText();
-         String customer = customerTxt.getText();
-         
-         if(date.isEmpty()|| customer.isEmpty())
-         {
-             JOptionPane.showMessageDialog(this, "Pleas enter all fields","try again",
-                     JOptionPane.ERROR_MESSAGE);
-         }else{
-            // DefaultTableModel model = ( DefaultTableModel) frame.getInvHeaderTable().getModel();
-            // model.addRow(new Object[]{customer,date);
-      //   model.addRow(new Object []{customer,date});
-         //model.insertRow(model.getRowCount(), new Object []{customer,date});
-         
-         
-         ArrayList<InvoiceHeader> a =(this.frame.getInvoiceHeadersList());
-         InvoiceHeader xx= new InvoiceHeader(this.frame.getInvoiceHeadersList().size()+1, customer, date);
-      a.add(xx);
-        this.frame.getInvHeaderTable().setModel(new InvoiceHeaderTableModel( a));
-        JOptionPane.showMessageDialog(null, "Row Added");
-        this.dispose();
-        
-         }
+
+        //String vDateStr = invDateTxt.getText();
+        String customer = customerTxt.getText();
+
+        if (vDateStr.isEmpty() || customer.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pleas enter all fields", "try again",
+                    JOptionPane.ERROR_MESSAGE);
+        } else if (checkDateFormate(vDateStr)) {
+             ArrayList<InvoiceHeader> a = (this.frame.getInvoiceHeadersList());
+            InvoiceHeader xx = new InvoiceHeader(this.frame.getInvoiceHeadersList().size() + 1, customer, vDateStr);
+            a.add(xx);
+            this.frame.getInvHeaderTable().setModel(new InvoiceHeaderTableModel(a));
+            JOptionPane.showMessageDialog(null, "Row Added");
+            this.dispose();
+            
+           
+
+        } else  {
+
+           
+        }
         
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
- NewInvoiceForm a=null;
- a.setVisible(false);
-        // TODO add your handling code here:
+               //cancelButton.addActionListener(ssframe.getController());
+cancelButton.setVisible(false);
+        this.dispose();
+        cancelButton = null;
+//        NewInvoiceForm b= null;
+//         b.setVisible(false);
+//        b.dispose();
+                // TODO add your handling code here:
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
@@ -172,13 +192,30 @@ public class NewInvoiceForm extends javax.swing.JFrame {
             }
         });
     }
+public boolean checkDateFormate(String DateStr){
+boolean result ;
+DateFormat formatter;
+        formatter = new SimpleDateFormat("dd-mm-YYYY");
+try {
+                 dateTemp = (Date) formatter.parse(DateStr);
+                 result = true;
+                         
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "WRONG DATE FORMATE ");
+                invDateTxt.setText("dd-mm-yyyy");
+                result = false;
+            }
 
+return result;
+} 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancelButton;
+    public javax.swing.JButton cancelButton;
     private javax.swing.JLabel customerLabel;
     public static javax.swing.JTextField customerTxt;
     public static javax.swing.JTextField invDateTxt;
     private javax.swing.JLabel invoiceDateLabel;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
+
+    
 }
