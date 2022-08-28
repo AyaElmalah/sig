@@ -100,11 +100,6 @@ public class InvoiceFrame extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        headerTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                headerTableMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(headerTable);
 
         newInvoiceButton.setText("Create New Invoice");
@@ -295,13 +290,6 @@ private void headerTableMouseClicked(java.awt.event.ActionEvent evt){
 // }
 
     }//GEN-LAST:event_deleteInvoiceButtonActionPerformed
-
-    private void headerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerTableMouseClicked
-        // TODO add your handling code here:
-        
-        int i=headerTable.getSelectedRow();
-        T
-    }//GEN-LAST:event_headerTableMouseClicked
 
     /**
      * @param args the command line arguments
