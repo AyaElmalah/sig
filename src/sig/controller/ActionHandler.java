@@ -12,11 +12,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import sig.model.InvoiceHeader;
 import sig.model.InvoiceHeaderTableModel;
@@ -181,58 +184,109 @@ public class ActionHandler implements ActionListener, ListSelectionListener {
         }
     }
 
+//    private void saveFile() {
+//
+//        ArrayList<InvoiceHeader> invoices = frame.getInvoiceHeadersList();
+//        // ArrayList<InvoiceLine> liness = frame.getInvoiceLinesList();
+//
+//        String headers = "";
+//        String lines = "";
+//        for (InvoiceHeader invoice : invoices) {
+//            String invCSV = invoice.getAsCSVfile();
+//            headers += invCSV;
+//            headers += "\n";
+//
+//            for (InvoiceLine line : invoice.getLines()) {
+//                String lineCSV = line.getAsCSV();
+//                lines += lineCSV;
+//                lines += "\n";
+//            }
+//        }
+//        System.out.println("Check point");
+//
+//        try {
+//            JFileChooser fc = new JFileChooser();
+//            //new
+//            fc.setFileFilter(new FileNameExtensionFilter("csv,txt", "csv", "txt"));
+//            fc.setAcceptAllFileFilterUsed(false);
+//
+//            int result = fc.showSaveDialog(frame);
+//            if (result == JFileChooser.APPROVE_OPTION) {
+//                File headerFile = fc.getSelectedFile();
+//                FileWriter hfw = new FileWriter(headerFile);
+//                hfw.write(headers);
+//                hfw.flush();
+//                hfw.close();
+//                result = fc.showSaveDialog(frame);
+//                JOptionPane.showMessageDialog(frame, "FILE SAVED SUCCUSSFULLY");
+//                if (result == JFileChooser.APPROVE_OPTION) {
+//                    File lineFile = fc.getSelectedFile();
+//                    FileWriter lfw = new FileWriter(lineFile);
+//                    lfw.write(lines);
+//                    lfw.flush();
+//                    lfw.close();
+//                }
+//            }
+//        } catch (FileNotFoundException ee) {
+//            JOptionPane.showMessageDialog(frame, "WRONG FILE FORMATE,PLEASE SELECT VALID FORMATE.");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     private void saveFile() {
+         ArrayList<InvoiceHeader> invoiceT = frame.getInvoiceHeadersList();
+          String headerData = "";
+       String linesData = "";
+   
+    
+      for (InvoiceHeader invoices : invoiceT) {
+            String invCSV = invoices.getAsCSVfile();
+            headerData+= invCSV;
+            headerData += "\n";
 
-        ArrayList<InvoiceHeader> invoices = frame.getInvoiceHeadersList();
-        // ArrayList<InvoiceLine> liness = frame.getInvoiceLinesList();
-
-        String headers = "";
-        String lines = "";
-        for (InvoiceHeader invoice : invoices) {
-            String invCSV = invoice.getAsCSVfile();
-            headers += invCSV;
-            headers += "\n";
-
-            for (InvoiceLine line : invoice.getLines()) {
+            for (InvoiceLine line : invoices.getLines()) {
                 String lineCSV = line.getAsCSV();
-                lines += lineCSV;
-                lines += "\n";
+               linesData += lineCSV;
+               linesData += "\n";
             }
         }
-        System.out.println("Check point");
-
         try {
-            JFileChooser fc = new JFileChooser();
-            int result = fc.showSaveDialog(frame);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File headerFile = fc.getSelectedFile();
-                FileWriter hfw = new FileWriter(headerFile);
-                hfw.write(headers);
-                hfw.flush();
-                hfw.close();
-                result = fc.showSaveDialog(frame);
-                JOptionPane.showMessageDialog(frame, "FILE SAVED SUCCUSSFULLY");
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File lineFile = fc.getSelectedFile();
-                    FileWriter lfw = new FileWriter(lineFile);
-                    lfw.write(lines);
-                    lfw.flush();
-                    lfw.close();
-                }
-            }
-        } catch (FileNotFoundException ee) {
-            JOptionPane.showMessageDialog(frame, "WRONG FILE FORMATE,PLEASE SELECT VALID FORMATE.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+              JFileChooser fc = new JFileChooser();
+             
+                        
 
+             int res = fc.showSaveDialog(frame);
+             if (res==JFileChooser.APPROVE_OPTION) {
+                 File file1 = fc.getSelectedFile();
+     
+            FileWriter fw = new FileWriter(file1);
+                fw.write(headerData);
+                fw.flush();
+                 fw.close();
+                 res = fc.showSaveDialog(frame);
+                JOptionPane.showMessageDialog(frame, "FILE SAVED SUCCUSSFULLY");
+                if (res == JFileChooser.APPROVE_OPTION) {
+                    File file2 = fc.getSelectedFile();
+                    FileWriter fw2 = new FileWriter(file2);
+                 fw2.write(linesData);
+                fw2.flush();
+                 fw2.close();   
+            }}
+        } 
+        catch (FileNotFoundException ee) {
+          JOptionPane.showMessageDialog(frame, "WRONG FILE FORMATE,PLEASE SELECT VALID FORMATE.");
+        }catch (IOException ex) {
+            Logger.getLogger(ActionHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     
     }
 
     private void newLine() {
         NewInvoiceLineForm a = null;
         int selectedRow = this.frame.getInvHeaderTable().getSelectedRow();
         if (a == null) {
-            a = new NewInvoiceLineForm(this.frame,frame.getInvoiceHeadersList().get(selectedRow));
+            a = new NewInvoiceLineForm(this.frame, frame.getInvoiceHeadersList().get(selectedRow));
         }
         a.setVisible(true);
 
