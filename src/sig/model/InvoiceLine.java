@@ -82,10 +82,14 @@ public void setHeader(InvoiceHeader header) {
 //    public String getAsCSV() {
 //return header.getNum() + "," + itemName + "," + itemPrice + "," + count;    }
 
-    public String getAsCSV() {
-        return header.getNum() + "," + itemName + "," + itemPrice + "," + count;    }
+   
 
+    
+    public String getAsCSV() {
+       return header.getNum() + "," + itemName + "," + itemPrice + "," + count;}
     }
+
+    
 
     
 

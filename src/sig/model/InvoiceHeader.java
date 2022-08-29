@@ -63,15 +63,17 @@ public class InvoiceHeader {
         return "InvoiceHeader{" + "num=" + num + ", customer=" + customer + ", date=" + date + '}';
     }
 
-//  public String getAsCSV() {
-//        return num+ "," + date + "," + customer;
-//    }
 
- 
+   
+
+    public String getCSVHeaderFile() {
+return num+ "," + date + "," + customer;    }
+
+  
 
     public String getAsCSVfile() {
-        return num+ "," + date + "," + customer;
+return num+ "," + date + "," + customer;     }
     }
 
     
-}
+

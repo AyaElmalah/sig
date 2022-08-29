@@ -211,8 +211,7 @@ public class ActionHandler implements ActionListener, ListSelectionListener {
                 hfw.flush();
                 hfw.close();
                 result = fc.showSaveDialog(frame);
-                JOptionPane.showMessageDialog(frame, "File saved successfully",
-                        "Information Message", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "FILE SAVED SUCCUSSFULLY");
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File lineFile = fc.getSelectedFile();
                     FileWriter lfw = new FileWriter(lineFile);
@@ -224,7 +223,6 @@ public class ActionHandler implements ActionListener, ListSelectionListener {
         } catch (FileNotFoundException ee) {
             JOptionPane.showMessageDialog(frame, "WRONG FILE FORMATE,PLEASE SELECT VALID FORMATE.");
         } catch (IOException e) {
-
             e.printStackTrace();
         }
 
